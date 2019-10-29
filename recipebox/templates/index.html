@@ -1,0 +1,8 @@
+<h1>Good Eats</h1>
+
+
+<ul>
+    {% for recipe in data %}
+        <li><a href="/recipe/{{ recipe.id }}/">{{ recipe.title }}</a>, by <a href="/author/{{ recipe.author.id }}/">{{ recipe.author }}</a></li>
+    {% endfor %}
+</ul>
