@@ -27,3 +27,8 @@ urlpatterns = [
     path('author/<int:author_id>/', views.author),
     path('recipe/<int:recipe_id>/', views.recipe)
 ]
+
+'''
+ if settings.DEBUG
+    urlpatterns += static
+'''
