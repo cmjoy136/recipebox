@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from recipebox.models import Author, Recipe
-from recipebox.forms import AuthorAddForm, RecipeAddForm
+from recipebox.forms import AuthorAddForm, RecipeAddForm, LoginForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     html = "index.html"
@@ -16,13 +18,14 @@ def author(request, author_id):
     return render(request, html, {"data": author, 'recipes': recipes})
 
 def recipe(request, recipe_id):
-    html = 'recipe.html'
+    html = 'generic_form.html'
     recipe = Recipe.objects.filter(id=recipe_id).first()
 
     return render(request, html, {"data": recipe})
 
+
 def authoraddview(request):
-    html = "author_add.html"
+    html = "generic_form.html"
 
     if request.method == 'POST':
         form = AuthorAddForm(request.POST)
@@ -37,8 +40,9 @@ def authoraddview(request):
 
     return render(request, html, {'form': form})
 
+@login_required
 def recipeaddview(request):
-    html = "recipe_add.html"
+    html = "generic_form.html"
 
     if request.method == "POST":
         form  = RecipeAddForm(request.POST)
@@ -56,5 +60,30 @@ def recipeaddview(request):
     form = RecipeAddForm()
 
     return render(request, html, {'form': form})
+
+def login_view(request):
+    html = "generic_form.html"
+
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            if user := authenticate(
+                username=data['username'],
+                password=data['password']
+            ):
+                login(request, user)
+                return HttpResponseRedirect(
+                    request.GET.get('next', reverse('homepage')))
+
+    form = LoginForm()
+
+    return render(request, html, {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('homepage'))
+
 
 
