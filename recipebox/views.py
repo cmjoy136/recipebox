@@ -8,6 +8,7 @@ def index(request):
     html = "index.html"
     recipes = Recipe.objects.all()
 
+
     return render(request, html, {'data': recipes})
 
 def author(request, author_id):
@@ -26,6 +27,7 @@ def recipe(request, recipe_id):
 
 def authoraddview(request):
     html = "generic_form.html"
+    form = AuthorAddForm()
 
     if request.method == 'POST':
         form = AuthorAddForm(request.POST)
@@ -36,14 +38,13 @@ def authoraddview(request):
                 name = data['name'],
                 bio = data['bio']
             )
-    form = AuthorAddForm()
 
     return render(request, html, {'form': form})
 
 @login_required
 def recipeaddview(request):
     html = "generic_form.html"
-
+    form = RecipeAddForm()
     if request.method == "POST":
         form  = RecipeAddForm(request.POST)
 
@@ -57,12 +58,13 @@ def recipeaddview(request):
                 instructions = data['instructions']
             )
             return HttpResponseRedirect(reverse('homepage'))
-    form = RecipeAddForm()
+    
 
     return render(request, html, {'form': form})
 
 def login_view(request):
     html = "generic_form.html"
+    form = LoginForm()
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -75,9 +77,7 @@ def login_view(request):
             ):
                 login(request, user)
                 return HttpResponseRedirect(
-                    request.GET.get('next', reverse('homepage')))
-
-    form = LoginForm()
+                    request.GET.get('next', '/'))
 
     return render(request, html, {'form': form})
 
