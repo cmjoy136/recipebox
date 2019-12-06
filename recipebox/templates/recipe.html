@@ -1,5 +1,19 @@
 <h1>{{data.title}}</h1>
 <h3>by {{data.author}}</h3>
+
+<a href='/'>Homepage</a>
+<h1>
+<a href = '/author/{{item.id}}/'>{{item.author.author}}</a></h1>
 <h2>{{data.description}} </h2>
 <p>{{data.instructions}}</p>
+{% if user.is_staff %}
+<a><button> Edit Recipe</button></a>
+{% elif request.user.author == recipe.author %}
+<a href='/edit/{{recipe.id}}'><button>Edit Recipe</button></a>
+{% endif %}
+{% if request.user.is_authenticated %}
+Would you like to add this to your favorites?
+<a href='/favorite/{{recipe.id}}'><button>Favorite</button></a>
+    {% endif %}
+    
 <a href="/">Back to the Menu</a>
