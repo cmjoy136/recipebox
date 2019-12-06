@@ -1,10 +1,19 @@
 <h1>Good Eats</h1>
 
+    
+
 hey {{ user.username }}
 
 
 <ul>
+    <div>
     {% for recipe in data %}
         <li><a href="/recipe/{{ recipe.id }}/">{{ recipe.title }}</a>, by <a href="/author/{{ recipe.author.id }}/">{{ recipe.author }}</a></li>
+        
+        <a href='/edit/{{recipe.id}}/'><button>Edit recipe</button></a>
+        <p>{{recipe.description}}</p>
+            
+
     {% endfor %}
+</div>
 </ul>
