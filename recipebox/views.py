@@ -19,7 +19,7 @@ def author(request, author_id):
     return render(request, html, {"data": author, 'recipes': recipes})
 
 def recipe(request, recipe_id):
-    html = 'generic_form.html'
+    html = 'recipe.html'
     recipe = Recipe.objects.filter(id=recipe_id).first()
 
     return render(request, html, {"data": recipe})
@@ -35,9 +35,11 @@ def authoraddview(request):
         if form.is_valid():
             data = form.cleaned_data
             Author.objects.create(
+                user = request.user,
                 name = data['name'],
                 bio = data['bio']
             )
+            return HttpResponseRedirect(reverse('homepage'))
 
     return render(request, html, {'form': form})
 
