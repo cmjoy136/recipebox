@@ -1,7 +1,9 @@
 from django import forms
 from recipebox.models import Author, Recipe
+from django.contrib.auth.models import User
 
 class AuthorAddForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all())
     name = forms.CharField(max_length=50)
     bio = forms.CharField(widget=forms.Textarea)
 
