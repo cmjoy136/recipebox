@@ -3,6 +3,7 @@ from recipebox.models import Author, Recipe
 from recipebox.forms import AuthorAddForm, RecipeAddForm, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
     html = "index.html"
@@ -24,6 +25,16 @@ def recipe(request, recipe_id):
 
     return render(request, html, {"data": recipe})
 
+def createuserview(request):
+    html = 'user_form.html'
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('homepage'))
+    return render(request, html, {'form': form})
 
 def authoraddview(request):
     html = "generic_form.html"
@@ -40,7 +51,6 @@ def authoraddview(request):
                 bio = data['bio']
             )
             return HttpResponseRedirect(reverse('homepage'))
-
     return render(request, html, {'form': form})
 
 @login_required
