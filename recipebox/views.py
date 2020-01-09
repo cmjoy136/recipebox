@@ -36,6 +36,7 @@ def createuserview(request):
         return HttpResponseRedirect(reverse('homepage'))
     return render(request, html, {'form': form})
 
+@login_required
 def authoraddview(request):
     html = "generic_form.html"
     form = AuthorAddForm()
